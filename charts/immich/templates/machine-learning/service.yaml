@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "immich.fullname" . }}-machine-learning
+  labels:
+    {{- include "immich.machineLearningLabels" . | nindent 4 }}
+spec:
+  type: ClusterIP
+  ports:
+    - port: 3003
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    {{- include "immich.machineLearningSelectorLabels" . | nindent 4 }}

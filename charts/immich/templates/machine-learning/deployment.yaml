@@ -1,0 +1,107 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "immich.fullname" . }}-machine-learning
+  labels:
+    {{- include "immich.machineLearningLabels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.machineLearning.replicaCount }}
+  strategy:
+    type: {{ .Values.machineLearning.deploymentStrategy }}
+  selector:
+    matchLabels:
+      {{- include "immich.machineLearningSelectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      annotations:
+        secretEnv/checksum: {{ include "immich.secretEnv" . | sha256sum }}
+        {{- with .Values.podAnnotations }}
+          {{- toYaml . | nindent 8 }}
+        {{- end }}
+      labels:
+        {{- include "immich.machineLearningLabels" . | nindent 8 }}
+        {{- with .Values.podLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.podSecurityContext }}
+      securityContext:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: {{ .Chart.Name }}
+          {{- with .Values.securityContext }}
+          securityContext:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          image: "{{ .Values.machineLearning.image.repository }}:{{
+            .Values.machineLearning.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.machineLearning.image.pullPolicy }}
+          env:
+            - name: TRANSFORMERS_CACHE
+              value: /cache
+          envFrom:
+            - secretRef:
+                name: {{ include "immich.fullname" . }}-env
+          ports:
+            - name: http
+              containerPort: 3003
+              protocol: TCP
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /ping
+              port: 3003
+            initialDelaySeconds: 0
+            periodSeconds: 10
+            timeoutSeconds: 1
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /ping
+              port: 3003
+            initialDelaySeconds: 0
+            periodSeconds: 10
+            timeoutSeconds: 1
+          resources:
+            limits:
+              memory: 1.5Gi
+            requests:
+              memory: 500Mi
+          startupProbe:
+            failureThreshold: 60
+            httpGet:
+              path: /ping
+              port: 3003
+            initialDelaySeconds: 0
+            periodSeconds: 10
+            timeoutSeconds: 1
+          {{- with .Values.machineLearning.resources }}
+          resources:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: model-cache
+              mountPath: /cache
+      volumes:
+        - name: model-cache
+          emptyDir: {}
+      {{- with .Values.machineLearning.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.machineLearning.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.machineLearning.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- if .Values.priorityClassName }}
+      priorityClassName: {{ .Values.priorityClassName }}
+      {{- end }}

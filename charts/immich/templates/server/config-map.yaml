@@ -1,0 +1,10 @@
+{{- if .Values.server.configuration }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "immich.fullname" . }}-server
+  labels:
+    {{- include "immich.serverLabels" . | nindent 4 }}
+data:
+  {{- include "immich.serverConfig" . | nindent 2 }}
+{{- end }}

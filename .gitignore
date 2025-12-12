@@ -1,0 +1,2 @@
+charts/*/charts/**.tgz
+charts/*/charts/.helm_ls_cache/**

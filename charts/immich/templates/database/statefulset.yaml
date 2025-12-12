@@ -1,0 +1,75 @@
+{{- if .Values.postgres.enabled }}
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ include "immich.fullname" . }}-database
+  labels:
+    {{- include "immich.databaseLabels" . | nindent 4 }}
+spec:
+  replicas: 1
+  serviceName: {{ include "immich.fullname" . }}-database
+  selector:
+    matchLabels:
+      {{- include "immich.databaseSelectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "immich.databaseLabels" . | nindent 8 }}
+      annotations:
+        secretEnv/checksum: {{ include "immich.secretEnv" . | sha256sum }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: database
+          image: "{{ .Values.postgres.image.repository }}:{{ .Values.postgres.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.postgres.image.pullPolicy }}
+          env:
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "immich.fullname" . }}-env
+                  key: DB_PASSWORD
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "immich.fullname" . }}-env
+                  key: DB_USERNAME
+            - name: POSTGRES_DB
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "immich.fullname" . }}-env
+                  key: DB_DATABASE_NAME
+            - name: POSTGRES_INITDB_ARGS
+              value: '--data-checksums'
+          ports:
+            - name: postgres
+              containerPort: 5432
+              protocol: TCP
+          volumeMounts:
+            - name: data
+              mountPath: /var/lib/postgresql/data
+              # Postgres wants a subdirectory instead of running in the root
+              # folder of a volume
+              subPath: postgres
+  volumeClaimTemplates:
+    - apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
+        name: data
+        labels:
+          {{- include "immich.databaseLabels" . | nindent 10 }}
+      spec:
+        accessModes:
+          {{- range .Values.postgres.persistence.accessModes }}
+          - {{ . | quote }}
+          {{- end }}
+        resources:
+          requests:
+            storage: {{ .Values.postgres.persistence.size | quote }}
+        {{- with .Values.postgres.persistence.storageClassName }}
+        storageClassName: {{ . }}
+        {{- end }}
+{{- end }}
