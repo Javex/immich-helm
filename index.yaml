@@ -1,0 +1,20 @@
+apiVersion: v1
+entries:
+  immich:
+  - apiVersion: v2
+    appVersion: v2.3.1
+    created: "2025-12-12T11:28:11.642491458Z"
+    dependencies:
+    - name: valkey
+      repository: https://valkey.io/valkey-helm/
+      version: 0.8.1
+    description: A chart to power Immich (immich.app) running on kubernetes
+    digest: 780b4ad3a76d811cfd26f5d411b267d4420e9222daf64b15df73766499df18d4
+    home: https://github.com/Javex/immich-helm
+    icon: https://raw.githubusercontent.com/immich-app/immich/main/design/immich-logo.svg
+    name: immich
+    type: application
+    urls:
+    - https://github.com/Javex/immich-helm/releases/download/immich-0.1.0/immich-0.1.0.tgz
+    version: 0.1.0
+generated: "2025-12-12T11:28:11.642497098Z"
