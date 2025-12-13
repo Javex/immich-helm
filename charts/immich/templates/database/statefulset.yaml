@@ -16,7 +16,7 @@ spec:
       labels:
         {{- include "immich.databaseLabels" . | nindent 8 }}
       annotations:
-        secretEnv/checksum: {{ include "immich.secretEnv" . | sha256sum }}
+        secretEnv/checksum: {{ include "immich.server.secretEnv" . | sha256sum }}
     spec:
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
