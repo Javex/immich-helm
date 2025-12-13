@@ -184,7 +184,7 @@ postgres:
     repository: ghcr.io/immich-app/postgres
     # This sets the pull policy for images.
     pullPolicy: IfNotPresent
-    tag: 14-vectorchord0.4.3-pgvectors0.2.0
+    tag: 16-vectorchord0.4.3-pgvectors0.2.0
   persistence:
     accessModes:
       - ReadWriteOnce
