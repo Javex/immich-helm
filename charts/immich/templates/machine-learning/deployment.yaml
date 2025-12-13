@@ -14,7 +14,6 @@ spec:
   template:
     metadata:
       annotations:
-        secretEnv/checksum: {{ include "immich.secretEnv" . | sha256sum }}
         {{- with .Values.podAnnotations }}
           {{- toYaml . | nindent 8 }}
         {{- end }}
@@ -44,9 +43,6 @@ spec:
           env:
             - name: TRANSFORMERS_CACHE
               value: /cache
-          envFrom:
-            - secretRef:
-                name: {{ include "immich.fullname" . }}-env
           ports:
             - name: http
               containerPort: 3003
@@ -89,7 +85,12 @@ spec:
               mountPath: /cache
       volumes:
         - name: model-cache
+          {{- if .Values.machineLearning.persistence.enabled }}
+          persistentVolumeClaim:
+            claimName: {{ include "immich.machineLearning.persistence.claimName" . }}
+          {{- else }}
           emptyDir: {}
+          {{- end }}
       {{- with .Values.machineLearning.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

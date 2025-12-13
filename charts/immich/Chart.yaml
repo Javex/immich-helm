@@ -4,7 +4,7 @@ description: A chart to power Immich (immich.app) running on kubernetes
 type: application
 home: https://github.com/Javex/immich-helm
 icon: https://raw.githubusercontent.com/immich-app/immich/main/design/immich-logo.svg
-version: 0.1.0
+version: 0.2.0
 appVersion: "v2.3.1"
 dependencies:
   - name: valkey

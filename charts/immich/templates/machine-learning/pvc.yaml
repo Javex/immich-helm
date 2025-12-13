@@ -1,0 +1,19 @@
+{{- if and .Values.machineLearning.persistence.enabled (not .Values.machineLearning.persistence.existingClaim) }}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "immich.machineLearning.persistence.claimName" . }}
+  labels:
+    {{- include "immich.machineLearningLabels" . | nindent 4 }}
+spec:
+  accessModes:
+    {{- range .Values.machineLearning.persistence.accessModes }}
+    - {{ . | quote }}
+    {{- end }}
+  resources:
+    requests:
+      storage: {{ .Values.machineLearning.persistence.size | quote }}
+  {{- with .Values.machineLearning.persistence.storageClassName }}
+  storageClassName: {{ . }}
+  {{- end }}
+{{- end }}

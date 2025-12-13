@@ -96,11 +96,23 @@ app.kubernetes.io/component: machine-learning
 Return the correct PVC claimName based on whether the user specified an
 existing claim or not
 */}}
-{{- define "immich.persistence.claimName" }}
-{{- if .Values.persistence.existingClaim }}
-{{- .Values.persistence.existingClaim }}
+{{- define "immich.server.persistence.claimName" }}
+{{- if .Values.server.persistence.existingClaim }}
+{{- .Values.server.persistence.existingClaim }}
 {{- else }}
 {{- include "immich.fullname" . }}-server
+{{- end }}
+{{- end }}
+
+{{/*
+Return the correct PVC claimName based on whether the user specified an
+existing claim or not
+*/}}
+{{- define "immich.machineLearning.persistence.claimName" }}
+{{- if .Values.machineLearning.persistence.existingClaim }}
+{{- .Values.machineLearning.persistence.existingClaim }}
+{{- else }}
+{{- include "immich.fullname" . }}-machine-learning-cache
 {{- end }}
 {{- end }}
 
@@ -115,21 +127,14 @@ immich-config.yaml: |
 {{/*
 Return contents of the secret used for environment variables
 */}}
-{{- define "immich.secretEnv" }}
+{{- define "immich.server.secretEnv" }}
 REDIS_HOSTNAME: {{ (include "valkey.fullname" .Subcharts.valkey ) | b64enc }}
 {{- if .Values.postgres.enabled }}
 DB_HOSTNAME: {{ printf "%s-%s" (include "immich.fullname" .) "database" | b64enc }}
-{{- else }}
-  {{- if .Values.database.host }}
-DB_HOSTNAME: {{ .Values.database.host | b64enc }}
-  {{- else }}
-  {{ fail "Must provide database.host if using external database" }}
-  {{- end }}
 {{- end }}
-DB_USERNAME: {{ .Values.database.username | b64enc }}
-DB_PASSWORD: {{ .Values.database.password | b64enc }}
-DB_DATABASE_NAME: {{ .Values.database.name | b64enc }}
-{{- range $key, $value := .Values.env }}
+{{- range $key, $value := .Values.server.env }}
+  {{- if $value }}
 {{ $key }}: {{ $value | b64enc }}
+  {{- end }}
 {{- end }}
 {{- end }}

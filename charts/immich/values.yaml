@@ -26,16 +26,6 @@ securityContext: {}
 
 priorityClassName: ""
 
-# Configure database
-database:
-  username: postgres
-  password: changeme
-  name: immich
-  # If using an external database you can provide the hostname here. When using
-  # the embedded database (postgres.enabled = true), then leave this out since
-  # it is auto-generated.
-  # host: mydb.mynamespace.svc.cluster.local
-
 # End of global section. The next two sections configure the server and
 # machine-learning components separately. After that are global resources
 # again.
@@ -56,6 +46,25 @@ server:
     pullPolicy: IfNotPresent
     # Overrides the image tag whose default is the chart appVersion.
     tag: ""
+
+  # Set environment variables for the server container. See available variables
+  # at https://docs.immich.app/install/environment-variables
+  # If you set a value to an empty string it will be omitted. This can be
+  # useful to skipping default values such as the password to provide
+  # externally, e.g. via extraEnvFrom
+  env:
+    DB_USERNAME: postgres
+    DB_PASSWORD: changeme
+    DB_DATABASE_NAME: immich
+    # If using an external database you can provide the hostname here. When using
+    # the embedded database (postgres.enabled = true), then leave this out since
+    # it is auto-generated.
+    # DB_HOSTNAME: mydb.mynamespace.svc.cluster.local
+
+  # Provide extra sources for environment variables. These can be created
+  # externally or using extraObjects below.
+  # See https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#environment-variables
+  extraEnvFrom: []
 
   resources: {}
     # Resource requirements vary with the size of each deployment. For example,
@@ -90,6 +99,21 @@ server:
   tolerations: []
 
   affinity: {}
+
+  persistence:
+    enabled: true
+    accessModes:
+      - ReadWriteOnce
+    # This is just the starting size for the main data store for your photos &
+    # videos. Increase it as you upload more data.
+    size: 10Gi
+    storageClassName: ""
+    existingClaim: ""
+    # If you already have a volume and want this PVC to use it (such as when
+    # manually managing PVs or restoring one from a backup), you can provide
+    # the name of an existing volume here. In this case, instead of creating a
+    # new volume, the PVC will attach to the existing one.
+    volumeName: ""
 
   # Any valid configuration for immich-server. For valid values see:
   # https://docs.immich.app/install/config-file
@@ -139,6 +163,20 @@ machineLearning:
   tolerations: []
 
   affinity: {}
+
+  # Create a PVC for the machine-learning cache volume so it doesn't have to
+  # re-download the model cache each time it starts up. The default is to use
+  # an emptyDir which is a temporary directory that gets cleared every time the
+  # pod is re-created.
+  persistence:
+    enabled: false
+    accessModes:
+      - ReadWriteOnce
+    # This size is just a guide, if you find you need more, increase this
+    # value.
+    size: 2Gi
+    storageClassName: ""
+    existingClaim: ""
 
 postgres:
   enabled: true
@@ -197,15 +235,6 @@ httpRoute:
   #     headers:
   #     - name: version
   #       value: v2
-
-persistence:
-  enabled: true
-  accessModes:
-    - ReadWriteOnce
-  size: 10Gi
-  storageClassName: ""
-  existingClaim: ""
-  subPath: ""
 
 valkey: {}
 

@@ -30,17 +30,17 @@ spec:
             - name: POSTGRES_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "immich.fullname" . }}-env
+                  name: {{ include "immich.fullname" . }}-server-env
                   key: DB_PASSWORD
             - name: POSTGRES_USER
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "immich.fullname" . }}-env
+                  name: {{ include "immich.fullname" . }}-server-env
                   key: DB_USERNAME
             - name: POSTGRES_DB
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "immich.fullname" . }}-env
+                  name: {{ include "immich.fullname" . }}-server-env
                   key: DB_DATABASE_NAME
             - name: POSTGRES_INITDB_ARGS
               value: '--data-checksums'

@@ -17,7 +17,7 @@ spec:
         {{- if .Values.server.configuration }}
         serverConfig/checksum: {{ include "immich.serverConfig" . | sha256sum }}
         {{- end }}
-        secretEnv/checksum: {{ include "immich.secretEnv" . | sha256sum }}
+        secretEnv/checksum: {{ include "immich.server.secretEnv" . | sha256sum }}
         {{- with .Values.podAnnotations }}
           {{- toYaml . | nindent 8 }}
         {{- end }}
@@ -50,7 +50,10 @@ spec:
           {{- end }}
           envFrom:
             - secretRef:
-                name: {{ include "immich.fullname" . }}-env
+                name: {{ include "immich.fullname" . }}-server-env
+            {{- with .Values.server.extraEnvFrom }}
+              {{- toYaml . | nindent 12 }}
+            {{- end }}
           ports:
             - name: http
               containerPort: 2283
@@ -83,13 +86,13 @@ spec:
           resources:
             {{- toYaml . | nindent 12 }}
           {{- end }}
-          {{- if or .Values.server.configuration .Values.server.volumes .Values.persistence.enabled }}
+          {{- if or .Values.server.configuration .Values.server.volumes .Values.server.persistence.enabled }}
           volumeMounts:
             {{- if .Values.server.configuration }}
             - name: config
               mountPath: /config
             {{- end }}
-            {{- if .Values.persistence.enabled }}
+            {{- if .Values.server.persistence.enabled }}
             - name: data
               mountPath: /data
             {{- end }}
@@ -97,17 +100,17 @@ spec:
               {{- toYaml . | nindent 12 }}
             {{- end }}
           {{- end }}
-      {{- if or .Values.server.configuration .Values.server.volumes .Values.persistence.enabled }}
+      {{- if or .Values.server.configuration .Values.server.volumes .Values.server.persistence.enabled }}
       volumes:
         {{- if .Values.server.configuration }}
         - name: config
           configMap:
             name: {{ include "immich.fullname" . }}-server
         {{- end }}
-        {{- if .Values.persistence.enabled }}
+        {{- if .Values.server.persistence.enabled }}
         - name: data
           persistentVolumeClaim:
-            claimName: {{ include "immich.persistence.claimName" . }}
+            claimName: {{ include "immich.server.persistence.claimName" . }}
         {{- end }}
         {{- with .Values.server.volumes }}
           {{- toYaml . | nindent 8 }}
