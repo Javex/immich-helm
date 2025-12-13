@@ -14,3 +14,10 @@ dependencies:
   - name: valkey
     repository: https://valkey.io/valkey-helm/
     version: 0.8.1
+annotations:
+  artifacthub.io/changes: |
+    - kind: added
+      description: Add license
+      links:
+        - name: GitHub PR
+          url: https://github.com/Javex/immich-helm/pull/2
