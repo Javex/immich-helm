@@ -236,6 +236,19 @@ httpRoute:
   #     - name: version
   #       value: v2
 
-valkey: {}
+valkey:
+  auth:
+    # When enabling authentication, make sure to provide the credentials to
+    # Immich.
+    enabled: false
+
+  # By default Valkey stores data only as long as the pod lives. This matches
+  # Immich's default docker compose setup. However, if you'd like job data to
+  # survive pod re-creation, you can enable storage here.
+  dataStorage:
+    enabled: false
+    # This size is a guide based on observed storage use for a 20,000 photo
+    # library. You can adjust it to suit your own needs.
+    requestedSize: 200Mi
 
 extraObjects: []
