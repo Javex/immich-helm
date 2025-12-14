@@ -5,8 +5,8 @@ This chart installs [Immich](https://immich.app/), a self-hosted photo and video
 # TL;DR
 
 ```bash
-$ helm repo add immich-helm https://javex.github.io/immich-helm
-$ helm install --namespace immich install immich immich-helm/immich
+helm repo add immich-helm https://javex.github.io/immich-helm
+helm install --namespace immich install immich immich-helm/immich
 ```
 
 ## Introduction
