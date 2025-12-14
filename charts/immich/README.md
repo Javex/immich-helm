@@ -30,7 +30,7 @@ compatibility with the official chart.
 ## Migrating
 
 If you'd like to migrate from the official Helm chart to this one, you can
-follow our [migration guide](/exmaples/README.md#Migrate)
+follow our [migration guide](/examples/README.md#Migrate)
 
 ## Database
 
