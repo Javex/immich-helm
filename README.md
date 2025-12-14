@@ -1,5 +1,9 @@
 # Immich Helm Chart
 
+[![Artifact Hub](https://img.shields.io/endpoint?url=https://artifacthub.io/badge/repository/immich-helm)](https://artifacthub.io/packages/search?repo=immich-helm)
+
+[![Release Charts](https://github.com/Javex/immich-helm/actions/workflows/release.yaml/badge.svg)](https://github.com/Javex/immich-helm/actions/workflows/release.yaml)
+
 A Helm chart to install [Immich](https://immich.app/) in your Kubernetes cluster.
 
 > [!IMPORTANT]
