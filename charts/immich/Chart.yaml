@@ -4,7 +4,7 @@ description: A chart to power Immich (immich.app) running on kubernetes
 type: application
 home: https://github.com/Javex/immich-helm
 icon: https://raw.githubusercontent.com/immich-app/immich/main/design/immich-logo.svg
-version: 0.2.4
+version: 0.3.0
 appVersion: "v2.3.1"
 maintainers:
   - name: Flozza
@@ -15,9 +15,19 @@ dependencies:
     repository: https://valkey.io/valkey-helm/
     version: 0.8.1
 annotations:
+  # valid supported kinds are added, changed, deprecated, removed, fixed and security.
   artifacthub.io/changes: |
+    - kind: added
+      description: Add support for server.extraEnv
+    - kind: fixed
+      description: Fix Helm repo URL in README
+    - kind: fixed
+      description: Remove extraneous resouces from machine-learning container
     - kind: changed
-      description: Update README
-      links:
-        - name: GitHub PR
-          url: https://github.com/Javex/immich-helm/pull/12
+      description: Don't set `null` annotation field on machine-learning
+    - kind: added
+      description: Set HF_XET_CACHE and MPLCONFIGDIR environment variables for machine-learning container
+    - kind: changed
+      description: Use named ports for lifecycle checks
+    - kind: changed
+      description: Rename cache volume for machine-learning container

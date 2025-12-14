@@ -13,10 +13,12 @@ spec:
       {{- include "immich.machineLearningSelectorLabels" . | nindent 6 }}
   template:
     metadata:
+      {{- if .Values.podAnnotations }}
       annotations:
         {{- with .Values.podAnnotations }}
           {{- toYaml . | nindent 8 }}
         {{- end }}
+      {{- end }}
       labels:
         {{- include "immich.machineLearningLabels" . | nindent 8 }}
         {{- with .Values.podLabels }}
@@ -41,6 +43,10 @@ spec:
             .Values.machineLearning.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.machineLearning.image.pullPolicy }}
           env:
+            - name: HF_XET_CACHE
+              value: /cache/huggingface-xet
+            - name: MPLCONFIGDIR
+              value: /cache/matplotlib-config
             - name: TRANSFORMERS_CACHE
               value: /cache
           ports:
@@ -51,7 +57,7 @@ spec:
             failureThreshold: 3
             httpGet:
               path: /ping
-              port: 3003
+              port: http
             initialDelaySeconds: 0
             periodSeconds: 10
             timeoutSeconds: 1
@@ -59,20 +65,15 @@ spec:
             failureThreshold: 3
             httpGet:
               path: /ping
-              port: 3003
+              port: http
             initialDelaySeconds: 0
             periodSeconds: 10
             timeoutSeconds: 1
-          resources:
-            limits:
-              memory: 1.5Gi
-            requests:
-              memory: 500Mi
           startupProbe:
             failureThreshold: 60
             httpGet:
               path: /ping
-              port: 3003
+              port: http
             initialDelaySeconds: 0
             periodSeconds: 10
             timeoutSeconds: 1
@@ -81,10 +82,10 @@ spec:
             {{- toYaml . | nindent 12 }}
           {{- end }}
           volumeMounts:
-            - name: model-cache
+            - name: cache
               mountPath: /cache
       volumes:
-        - name: model-cache
+        - name: cache
           {{- if .Values.machineLearning.persistence.enabled }}
           persistentVolumeClaim:
             claimName: {{ include "immich.machineLearning.persistence.claimName" . }}
