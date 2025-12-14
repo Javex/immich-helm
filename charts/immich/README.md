@@ -5,8 +5,8 @@ This chart installs [Immich](https://immich.app/), a self-hosted photo and video
 # TL;DR
 
 ```bash
-$ helm repo add javex https://javex.github.io/helm
-$ helm install --namespace immich install immich javex/immich
+helm repo add immich-helm https://javex.github.io/immich-helm
+helm install --namespace immich install immich immich-helm/immich
 ```
 
 ## Introduction
@@ -26,6 +26,11 @@ If you are coming from the official chart, you need to explicitly migrate to the
 new format. Be careful when doing the migration to avoid breaking your
 installation. This chart prioritises Helm best practices over backwards
 compatibility with the official chart.
+
+## Migrating
+
+If you'd like to migrate from the official Helm chart to this one, you can
+follow our [migration guide](/examples/README.md#Migrate)
 
 ## Database
 

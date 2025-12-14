@@ -43,10 +43,15 @@ spec:
           {{- end }}
           image: "{{ .Values.server.image.repository }}:{{ .Values.server.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.server.image.pullPolicy }}
-          {{- if .Values.server.configuration }}
+          {{- if or .Values.server.configuration .Values.server.extraEnv }}
           env:
+            {{- if .Values.server.configuration }}
             - name: IMMICH_CONFIG_FILE
               value: /config/immich-config.yaml
+            {{- end }}
+            {{- with .Values.server.extraEnv }}
+              {{- toYaml . | nindent 12 }}
+            {{- end }}
           {{- end }}
           envFrom:
             - secretRef:
@@ -62,7 +67,7 @@ spec:
             failureThreshold: 3
             httpGet:
               path: /api/server/ping
-              port: 2283
+              port: http
             initialDelaySeconds: 0
             periodSeconds: 10
             timeoutSeconds: 1
@@ -70,7 +75,7 @@ spec:
             failureThreshold: 3
             httpGet:
               path: /api/server/ping
-              port: 2283
+              port: http
             initialDelaySeconds: 0
             periodSeconds: 10
             timeoutSeconds: 1
@@ -78,7 +83,7 @@ spec:
             failureThreshold: 30
             httpGet:
               path: /api/server/ping
-              port: 2283
+              port: http
             initialDelaySeconds: 0
             periodSeconds: 10
             timeoutSeconds: 1

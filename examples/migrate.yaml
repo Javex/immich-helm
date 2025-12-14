@@ -1,0 +1,87 @@
+#
+# Example: Migrate
+#
+# This is an example that documents how to migrate from the official Helm chart
+# to this one with minimal changes. Make sure to read the docs in the README as
+# well as all the comments here.
+#
+
+server:
+  # You can uncomment this and replace the tag with your current version. We
+  # recommend doing a version change at the same time as migrating to this chart.
+  # Instead, upgrade later, once the migration is complete.
+  # image:
+  #   tag: v2.0.0
+  env:
+    # These values are set to empty so they won't be added to the default
+    # set of environment variables. Instead extraEnvFrom below sets them in the
+    # exact way that the official example does.
+    DB_USERNAME: ""
+    DB_PASSWORD: ""
+    DB_DATABASE_NAME: ""
+
+  # These values are taken from the original example. If you created a secret
+  # called "immich-database-app" with these values, you can keep this as-is.
+  # Otherwise, you'll need to adjust it to match your environment.
+  extraEnv:
+    - name: DB_HOSTNAME
+      valueFrom:
+        secretKeyRef:
+          name: immich-database-app
+          key: host
+    - name: DB_USERNAME
+      valueFrom:
+        secretKeyRef:
+          name: immich-database-app
+          key: user
+    - name: DB_PASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: immich-database-app
+          key: password
+    - name: DB_DATABASE_NAME
+      valueFrom:
+        secretKeyRef:
+          name: immich-database-app
+          key: dbname
+
+  # Just like the official example, this assumes you have created a PVC already
+  # and here you're just providing its name. You can also let our chart manage
+  # your PVC, but you'll have to manually move the data into it.
+  persistence:
+    existingClaim: immich-library-pvc
+
+  # Setting this to `null` disables the config file entirely, allowing you to
+  # change configuration in the user interface. This is the default behaviour
+  # of the official example. Make sure to set the machine learning URL in the
+  # Admin UI.
+  configuration: null
+
+# You can uncomment this and replace the tag with your current version. We
+# recommend doing a version change at the same time as migrating to this chart.
+# Instead, upgrade later, once the migration is complete.
+# machineLearning:
+#   image:
+#     tag: v2.0.0
+
+# By default, we use port 80, but the official default is 2283.
+service:
+  port: 2283
+
+# This chart comes with the equivalent Postgres container that the Immich
+# documentation provides with the `docker-compose.yaml`. However, the official
+# Helm chart does not use this. Assuming you already have your database
+# elsewhere, this won't create a new one.
+postgres:
+  enabled: false
+
+# The official chart also uses Valkey but included in the Helm chart. This
+# chart depends on the official Valkey Helm chart instead, so it'll mostly be a
+# replacement.
+valkey:
+  # You can uncomment this and replace the tag with your current version. Avoid
+  # downgrading Valkey to avoid possible data corruption issues.
+  # image:
+  #   tag: 9.0-alpine@sha256:b4ee67d73e00393e712accc72cfd7003b87d0fcd63f0eba798b23251bfc9c394
+  serviceAccount:
+    create: false

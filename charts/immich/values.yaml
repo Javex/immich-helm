@@ -61,8 +61,15 @@ server:
     # it is auto-generated.
     # DB_HOSTNAME: mydb.mynamespace.svc.cluster.local
 
+  # Provide extra environment variables. These can be created
+  # externally or using extraObjects below.
+  # The items will be added verbatim in the container's `env` entries.
+  # See https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#environment-variables
+  extraEnv: []
+
   # Provide extra sources for environment variables. These can be created
   # externally or using extraObjects below.
+  # The items will be added verbatim in the container's `envFrom` entries.
   # See https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#environment-variables
   extraEnvFrom: []
 
