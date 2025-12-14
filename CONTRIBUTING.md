@@ -18,8 +18,8 @@ description.
 For bugs, provide enough detail so they can be reproduced. Ideally, your entire
 `values.yaml` and the version you used.
 
-For new features, describe what you'd like the behaviour to be. If you can,
-provide an example `values.yaml` block that you'd like to work, and what the
+For new features, describe what you'd like the behaviour to be. If possible,
+provide an example `values.yaml` block, with an explanation, and what the
 outcome should be.
 
 ## Pull Requests
@@ -47,8 +47,8 @@ annotations:
       description: Add CONTRIBUTING.md
       links:
         - name: GitHub PR
-          url: https://github.com/Javex/immich-helm/pull/7
+          url: https://github.com/Javex/immich-helm/pull/10
 ```
 
 Remove any previous changes as each version only contains its latest changelog.
-You can then view the [full changelog on Artifact Hub](https://artifacthub.io/packages/helm/immich-helm/immich?modal=changelog)
+You can then view the [full changelog on Artifact Hub](https://artifacthub.io/packages/helm/immich-helm/immich?modal=changelog).
