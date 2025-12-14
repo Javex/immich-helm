@@ -11,6 +11,11 @@ $ helm install --namespace immich install immich javex/immich
 
 ## Introduction
 
+> [!IMPORTANT]
+> This Helm chart is still under development. Expect breaking frequent breaking
+> changes. If you'd like to help test this chart, please consider trying it
+> out as an early adopter.
+
 The chart provides an alternative to the [official Helm chart](https://github.com/immich-app/immich-charts).
 It avoids using the [bjw-s](https://github.com/bjw-s-labs/helm-charts) library
 chart. Instead, it uses Helm template files directly. This allows it to follow

@@ -2,9 +2,10 @@
 
 A Helm chart to install [Immich](https://immich.app/) in your Kubernetes cluster.
 
-> [!CAUTION]
-> This Helm chart is under heavy development. Expect unannounced breaking
-> changes. If you can, contribute feedback and test changes.
+> [!IMPORTANT]
+> This Helm chart is still under development. Expect breaking frequent breaking
+> changes. If you'd like to help test this chart, please consider trying it
+> out as an early adopter.
 
 This is an **unofficial** Helm chart to provide an alternative to the [official
 Immich Helm chart](https://github.com/immich-app/immich-charts). If you need a
