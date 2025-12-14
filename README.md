@@ -12,3 +12,7 @@ more stable and better supported chart, check out the official one.
 
 The main differentiator is that this chart doesn't use the [bjw-s](https://github.com/bjw-s-labs/helm-charts)
 library chart, instead relying on raw Helm template files.
+
+## Contribute
+
+See [CONTRIBUTING](CONTRIBUTING.md).
