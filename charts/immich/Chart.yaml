@@ -13,7 +13,7 @@ maintainers:
 dependencies:
   - name: valkey
     repository: https://valkey.io/valkey-helm/
-    version: 0.8.1
+    version: 0.9.3
 annotations:
   # valid supported kinds are added, changed, deprecated, removed, fixed and security.
   artifacthub.io/changes: |
