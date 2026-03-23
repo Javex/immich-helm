@@ -17,7 +17,7 @@ jobs:
           fetch-depth: 0 # Required for chart-testing to determine changed charts
 
       - name: Set up Helm
-        uses: azure/setup-helm@v4
+        uses: azure/setup-helm@v5
         with:
           version: v3.19.2
 
