@@ -4,7 +4,7 @@ description: A chart to power Immich (immich.app) running on kubernetes
 type: application
 home: https://github.com/Javex/immich-helm
 icon: https://raw.githubusercontent.com/immich-app/immich/main/design/immich-logo.svg
-version: 0.5.0
+version: 0.5.1
 appVersion: "v3.3.4"
 maintainers:
   - name: Flozza
@@ -18,4 +18,4 @@ annotations:
   # valid supported kinds are added, changed, deprecated, removed, fixed and security.
   artifacthub.io/changes: |
     - kind: changed
-      description: Update immich to v3.3.4
+      description: Update valkey to 0.12.0
