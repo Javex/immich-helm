@@ -10,5 +10,15 @@
       "matchJsonata": ["isBreaking != true"],
       "automerge": true
     }
+  ],
+  "customManagers": [
+    {
+      "customType": "regex",
+      "description": "Update Immich appVersion from Docker tags",
+      "managerFilePatterns": ["charts/immich/Chart\\.yaml$"],
+      "matchStrings": ["appVersion:\\s+\"(?<currentValue>[^\"]+)\""],
+      "depNameTemplate": "ghcr.io/immich-app/immich-server",
+      "datasourceTemplate": "docker"
+    }
   ]
 }
