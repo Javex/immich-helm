@@ -148,9 +148,9 @@ re-creation, you can enable persistence:
 
 ```yaml
 valkey:
-  dataStorage:
+  persistence:
     enabled: true
-    requestedSize: 200Mi
+    size: 200Mi
 ```
 
 The size for the volume is only guide. Observe your installation's storage use
